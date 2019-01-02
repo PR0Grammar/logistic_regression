@@ -69,4 +69,12 @@ class LogisticRegression:
     # Uses the truncated Newton method to determine our theata values that minimize our overall cost
     def optimize(self):
         optimized_values = opt.fmin_tnc(func=self.compute_cost, x0=self.thetas, fprime=self.gradient, args=(self.features, self.results))
-        self.thetas = optimized_values[0].transpose()
+        self.thetas = np.reshape(optimized_values[0], (self.n, 1))
+
+    # Takes in a 1D array of feature values, and predicts based on current parameters. Returns a value [0,1] 
+    def predict(self, X):
+        if(X.shape[0] == self.n - 1):
+            X = np.insert(X, 0, 1)
+        
+        predicted_probability = sigmoid(np.dot(X, self.thetas)[0])
+        return predicted_probability
