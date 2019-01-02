@@ -38,9 +38,8 @@ results = data_matrix[0: data_matrix.shape[0], 2:3]
 
 log_regression = LogisticRegression(features, results)
 
+log_regression.optimize()
 print(log_regression.compute_cost())
-
-
 # Show all graphs
 plt.show()
 
