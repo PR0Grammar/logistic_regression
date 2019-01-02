@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from LogisticRegression import LogisticRegression
 
 data_matrix = np.loadtxt('./exdata1.txt')
 
@@ -13,7 +14,7 @@ for row in range(0, data_matrix.shape[0]):
         not_admitted = np.vstack((not_admitted, data_matrix[row, :]))
 
 
-# Figure without decision boundary
+# Graph without decision boundary
 
 no_decision_boundary_graph = plt.figure()
 
@@ -29,4 +30,17 @@ plt.scatter(not_admitted_x1, not_admitted_x2, c='purple', label='Not Admitted')
 plt.xlabel("Exam 1 Score")
 plt.ylabel("Exam 2 Score")
 
+
+# Logistic Regression
+
+features = data_matrix[0: data_matrix.shape[0], 0:2]
+results = data_matrix[0: data_matrix.shape[0], 2:3]
+
+log_regression = LogisticRegression(features, results)
+
+print(log_regression.compute_cost())
+
+
+# Show all graphs
 plt.show()
+
