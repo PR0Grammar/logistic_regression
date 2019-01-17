@@ -18,25 +18,16 @@ def compute_cost(thetas, X, y):
     cost = -(cost / m)
     return cost
 
-def compute_cost_reg(thetas, X, y, lamda_t=1):
-    cost = 0
-    theta_T = thetas.transpose()
-    m = X.shape[0]
-    n = X.shape[1]
-    
+def compute_cost_reg(thetas, X, y, lambda_t=1.0):
+    m = X.shape[0]    
+    cost = compute_cost(thetas, X, y)
 
-    for i in range(1, m):
-        x_i = X[i: i + 1, 0: n].transpose()
-        y_i = y[i, 0]
-        theta_feature_product = np.dot(theta_T, x_i)[0]
-        hypothesis_value = sigmoid(theta_feature_product)
-        cost += (y_i * math.log(hypothesis_value)) + ((1 - y_i) * math.log(1 - hypothesis_value))
-    cost = -(cost / m)
-
+    theta_it = iter(thetas)
     reduced_theta = 0
-    for j in range(1, n):
-        reduced_theta += thetas[j] ** 2
-    reduced_theta = (reduced_theta * lamda_t) / (2 * m)
+    next(theta_it) # Skip first theta, not needed
+    for theta in theta_it:
+        reduced_theta += theta ** 2
+    reduced_theta = (reduced_theta) * (lambda_t / (2.0 * m))
     return cost + reduced_theta
     
 
@@ -60,7 +51,7 @@ def gradient(thetas, X, y):
         gradient[j] = (term / m)
     return gradient
 
-def gradient_reg(thetas, X, y, lambda_t=1):
+def gradient_reg(thetas, X, y, lambda_t=1.0):
     gradient = np.ndarray(thetas.shape[0])
     theta_T = thetas.transpose()
     m = X.shape[0]
@@ -69,7 +60,7 @@ def gradient_reg(thetas, X, y, lambda_t=1):
     for j in range(0, n):
         term = 0
         for i in range(0, m):
-            x_i = X[i: i + 1, 0: n].transpose()
+            x_i = X[i: i + 1, :].transpose()
             y_i = y[i, 0]
 
             theta_feature_product = np.dot(theta_T, x_i)[0]
@@ -77,13 +68,18 @@ def gradient_reg(thetas, X, y, lambda_t=1):
 
             term += (hypothesis_value - y_i) * X[i, j]
         
-        gradient[j] = (term / m)
-        gradient[j] += (lambda_t * thetas[j]) / m
+        gradient[j] = (term / m) + ( (lambda_t / m) * thetas[j] )
+
+    print(gradient)
     return gradient
 
 # Uses the truncated Newton method to determine our theata values that minimize our overall cost
 def optimize(thetas, X, y):
     optimized_values = opt.fmin_tnc(func=compute_cost, x0=thetas, fprime=gradient, args=(X, y))
+    return optimized_values[0]
+
+def optimize_reg(thetas, X, y, lamda_t=1.0):
+    optimized_values = opt.fmin_tnc(func=compute_cost_reg, x0=thetas, fprime=gradient_reg, args=(X, y, lamda_t))
     return optimized_values[0]
 
 # Takes in a 1D array of feature values, and predicts based on current parameters. Returns a value [0,1] 

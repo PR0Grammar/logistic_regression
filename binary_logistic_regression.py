@@ -36,16 +36,12 @@ plt.ylabel("Exam 2 Score")
 
 
 # Logistic Regression
-feature_zero = np.ones((data_matrix.shape[0], 1));
+feature_zero = np.ones((data_matrix.shape[0], 1))
 features = np.hstack((feature_zero, data_matrix[: , 0:2]))
-results = data_matrix[0: data_matrix.shape[0], 2:3]
+results = data_matrix[: , 2:3]
 
-print(features)
-init_thetas = np.zeros(3);
-
-optimized_thetas = lr.optimize(init_thetas, features, results);
-print(optimized_thetas)
-
+init_thetas = np.zeros(3)
+optimized_thetas = lr.optimize(init_thetas, features, results)
 
 # # Plot for decision boundary
 db_x = np.array([np.min(X[:, 0]) - 2, np.max(X[:, 1]) + 2])

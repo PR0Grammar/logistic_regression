@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from LogisticRegression import LogisticRegression as lr
+import logisticregression as lr
 
 data_matrix = np.loadtxt('./exdata2.txt')
 
@@ -33,9 +33,16 @@ plt.xlabel('Feature 1')
 plt.ylabel('Feature 2')
 plt.legend((y_0_plot, y_1_plot), ('No', 'Yes'))
 
-plt.show()
-
 f = np.array([1,2,3,4])
 
 # Logistic Regression
+
+feature_zero = np.ones((data_matrix.shape[0], 1))
+features = np.hstack((feature_zero, data_matrix[:, 0:2]))
+results = data_matrix[: , 2:3]
+
+init_theta = np.zeros(3)
+optimized_thetas = lr.optimize_reg(init_theta, features, results)
+
+# # Plot for decision boundary
 
