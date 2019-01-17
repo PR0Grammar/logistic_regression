@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from LogisticRegression import LogisticRegression
+import logisticregression as lr
 
 data_matrix = np.loadtxt('./exdata1.txt')
 
@@ -36,18 +36,20 @@ plt.ylabel("Exam 2 Score")
 
 
 # Logistic Regression
-
-features = data_matrix[0: data_matrix.shape[0], 0:2]
+feature_zero = np.ones((data_matrix.shape[0], 1));
+features = np.hstack((feature_zero, data_matrix[: , 0:2]))
 results = data_matrix[0: data_matrix.shape[0], 2:3]
 
-log_regression = LogisticRegression(features, results)
+print(features)
+init_thetas = np.zeros(3);
 
-log_regression.optimize()
+optimized_thetas = lr.optimize(init_thetas, features, results);
+print(optimized_thetas)
 
 
-# Plot for decision boundary
+# # Plot for decision boundary
 db_x = np.array([np.min(X[:, 0]) - 2, np.max(X[:, 1]) + 2])
-db_y = (-1.0 / log_regression.thetas[2, 0]) * (log_regression.thetas[1, 0] * db_x + log_regression.thetas[0, 0])
+db_y = (-1.0 / optimized_thetas[2]) * (optimized_thetas[1] * db_x + optimized_thetas[0  ])
 
 dec_bound = plt.plot(db_x, db_y)
 

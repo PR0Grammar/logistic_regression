@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from LogisticRegression import LogisticRegression
+from LogisticRegression import LogisticRegression as lr
 
 data_matrix = np.loadtxt('./exdata2.txt')
 
@@ -39,5 +39,3 @@ f = np.array([1,2,3,4])
 
 # Logistic Regression
 
-log_reg = LogisticRegression(X, y)
-print(log_reg.map_feature(6))
